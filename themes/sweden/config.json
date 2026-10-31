@@ -1,19 +1,16 @@
 {
   "dock_apps": [
     "com.netflix.ninja",
-    "com.google.android.youtube.tv",
     "com.amazon.amazonvideo.livingroom",
     "com.disney.disneyplus",
-    "com.apple.atve.androidtv.appletv",
-    "com.wbd.stream"
+    "com.crunchyroll.crunchyroid",
+    "org.smarttube.stable",
+    "com.tcl.browser"
   ],
   "columns": 6,
   "rows_below_dock": 1,
   "background_color": "#05070C",
   "wallpaper": true,
-  "wallpaper_rotation_minutes": 60,
-  "wallpaper_order": "sequential",
-  "wallpaper_captions": true,
   "cinematic_home": false,
   "dock_title": false,
   "dock_glass": true,
@@ -25,5 +22,8 @@
   "app_glow": false,
   "fade_rows": true,
   "focus_overshoot": false,
-  "advanced_effects": true
+  "advanced_effects": true,
+  "wifi_status_color": true,
+  "wifi_status_warnings": true,
+  "show_stats": true
 }
