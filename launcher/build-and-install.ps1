@@ -22,23 +22,31 @@ if (-not $TvHost) { throw 'pass -TvHost <tv ip> or set $env:TV_HOST' }
 $env:TV_HOST = $TvHost
 Set-Location $PSScriptRoot
 
-if (-not $env:JAVA_HOME -or -not (Test-Path "$env:JAVA_HOME\bin\java.exe")) {
-    $jbr = Get-ChildItem 'C:\Program Files\Android' -Directory -ErrorAction SilentlyContinue |
-        ForEach-Object { Join-Path $_.FullName 'jbr' } | Where-Object { Test-Path "$_\bin\java.exe" } | Select-Object -First 1
-    if (-not $jbr) { throw 'Set JAVA_HOME to a JDK 17+ (Android Studio ships one in its jbr folder)' }
-    $env:JAVA_HOME = $jbr
-}
-$sdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } else { "$env:LOCALAPPDATA\Android\Sdk" }
-if (-not (Test-Path local.properties)) {
-    "sdk.dir=$($sdk -replace '\\', '\\')" | Out-File -Encoding ascii local.properties
-}
+# SKIP_BUILD=1 installs the APK already built (tools\docker-build.ps1 builds it in Docker, with no JDK here).
+if ($env:SKIP_BUILD -ne '1') {
+    if (-not $env:JAVA_HOME -or -not (Test-Path "$env:JAVA_HOME\bin\java.exe")) {
+        $jbr = Get-ChildItem 'C:\Program Files\Android' -Directory -ErrorAction SilentlyContinue |
+            ForEach-Object { Join-Path $_.FullName 'jbr' } | Where-Object { Test-Path "$_\bin\java.exe" } | Select-Object -First 1
+        if (-not $jbr) { throw 'Set JAVA_HOME to a JDK 17+ (Android Studio ships one in its jbr folder)' }
+        $env:JAVA_HOME = $jbr
+    }
+    $sdk = if ($env:ANDROID_HOME) { $env:ANDROID_HOME } else { "$env:LOCALAPPDATA\Android\Sdk" }
+    if (-not (Test-Path local.properties)) {
+        "sdk.dir=$($sdk -replace '\\', '\\')" | Out-File -Encoding ascii local.properties
+    }
 
-.\gradlew.bat assembleRelease -q --console=plain
-if ($LASTEXITCODE -ne 0) { throw 'Gradle build failed' }
+    .\gradlew.bat assembleRelease -q --console=plain
+    if ($LASTEXITCODE -ne 0) { throw 'Gradle build failed' }
+} elseif (-not (Test-Path 'app\build\outputs\apk\release\app-release.apk')) {
+    throw 'SKIP_BUILD=1 but there is no app\build\outputs\apk\release\app-release.apk; build it first (tools\docker-build.ps1)'
+}
 
 $py = '..\tools\venv\Scripts\python.exe'
 # Which app owns Home differs by build; ask the TV, but only accept a launcher we recognise (the answer
 # can also be Android's chooser "android", the setup wizard, or another third-party launcher).
+# ColorOS TV's com.heytap.tv.launcher stays out of the list below: recognising it would disable
+# the stock home, and the default applicationId is refused as Home on that firmware.
+# docs/devices/oppo-k9-55-oppocnm632.md.
 $knownStock = @('com.google.android.tvlauncher', 'com.google.android.apps.tv.launcherx', 'com.google.android.leanbacklauncher', 'com.mitv.tvhome')
 if (-not $StockLauncher) {
     $homePkg = & $py -I ..\tools\tv.py 'cmd package resolve-activity --brief -a android.intent.action.MAIN -c android.intent.category.HOME' | Select-Object -Last 1
@@ -77,7 +85,11 @@ Write-Host $out
 if ($LASTEXITCODE -ne 0 -or "$out" -match 'Error') { throw 'could not set the new launcher as home; the stock launcher was left untouched' }
 # Start the launcher on its own, before the stock Home is touched (see build-and-install.sh, #239):
 # in the batch a failed start only prints an Error line and the stock launcher would be disabled anyway.
-$start = (& $py -I ..\tools\tv.py 'am start -W -a android.intent.action.MAIN -c android.intent.category.HOME -n com.gathin.tvhome/.MainActivity') -join "`n"
+# With -StockLauncher none the stock launcher stays Home (stock_home_redirect): a MAIN+HOME start would make this
+# launcher the home process until a restart, and Android then blocks the stock launcher's button launches (#1274).
+$startCmd = if ($StockLauncher -eq 'none') { 'am start -W -n com.gathin.tvhome/.MainActivity' }
+            else { 'am start -W -a android.intent.action.MAIN -c android.intent.category.HOME -n com.gathin.tvhome/.MainActivity' }
+$start = (& $py -I ..\tools\tv.py $startCmd) -join "`n"
 Write-Host $start
 if ($LASTEXITCODE -ne 0 -or $start -notmatch 'Status: ok' -or $start -match '(?m)^Error') { throw "the new launcher did not start (see above); $StockLauncher was left enabled" }
 @(
