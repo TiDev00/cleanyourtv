@@ -1,0 +1,89 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+
+    <!-- Deep cinematic background -->
+    <path
+        android:fillColor="#0C1410"
+        android:pathData="M0,0h320v180h-320z" />
+
+    <!-- Subtle geometric background mesh -->
+    <path
+        android:fillColor="#13201A"
+        android:pathData="M0,0 L140,0 L40,180 L0,180 Z" />
+    <path
+        android:fillColor="#15261F"
+        android:pathData="M180,0 L320,0 L320,180 L280,180 Z" />
+
+    <!-- Outer Ambient Glow Circle -->
+    <path
+        android:fillColor="#0D3823"
+        android:pathData="M160,86m-64,0a64,64 0 1,0 128,0a64,64 0 1,0 -128,0" />
+    <path
+        android:fillColor="#114C2F"
+        android:pathData="M160,86m-52,0a52,52 0 1,0 104,0a52,52 0 1,0 -104,0" />
+
+    <!-- Hexagonal Shield Badge -->
+    <path
+        android:fillColor="#162920"
+        android:strokeColor="#254D3B"
+        android:strokeWidth="2"
+        android:pathData="M160,42 L198,62 L198,110 L160,132 L122,110 L122,62 Z" />
+
+    <!-- Inner Shield Accent Border -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00E676"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.8"
+        android:pathData="M160,48 L192,65 L192,106 L160,125 L128,106 L128,65 Z" />
+
+    <!-- Speed Lines / Clean Wings -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M110,80 L120,80 M102,90 L118,90 M110,100 L122,100" />
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00E5FF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M210,80 L200,80 M218,90 L202,90 M210,100 L198,100" />
+
+    <!-- High-Tech Lightning Spark & Speed Wedge -->
+    <path
+        android:fillColor="#00E676"
+        android:pathData="M163,55 L144,89 L161,89 L155,118 L178,81 L161,81 Z" />
+
+    <path
+        android:fillColor="#B9F6CA"
+        android:pathData="M163,55 L152,89 L161,89 L158,104 L168,85 L161,81 Z" />
+
+    <!-- Sparkling Energy Dots -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M160,54m-2,0a2,2 0 1,0 4,0a2,2 0 1,0 -4,0" />
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M136,66m-1.5,0a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" />
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M184,66m-1.5,0a1.5,1.5 0 1,0 3,0a1.5,1.5 0 1,0 -3,0" />
+
+    <!-- Bottom Tech Status Line -->
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#00E676"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M130,154 L190,154" />
+    <path
+        android:fillColor="#00E5FF"
+        android:pathData="M160,154m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+
+</vector>

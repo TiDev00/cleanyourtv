@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Cleaner</string>
+    <string name="app_subtitle">TV Performance &amp; Memory Optimizer</string>
+    <string name="system_ready">SYSTEM READY</string>
+    <string name="system_busy">OPTIMIZING…</string>
+    <string name="loading">Reading system state…</string>
+
+    <string name="ram_header">RAM MEMORY</string>
+    <string name="storage_header">INTERNAL STORAGE</string>
+
+    <string name="ram_metric">%1$s used (%2$d%%)</string>
+    <string name="ram_subtext">%1$s available • %2$s total</string>
+    <string name="storage_metric">%1$s</string>
+    <string name="storage_subtext">%1$s free • %2$s total</string>
+
+    <string name="clean_button">Force Close All User Apps</string>
+    <string name="settings_storage_button">TV Storage</string>
+    <string name="settings_apps_button">TV App Manager</string>
+    <string name="back">Exit</string>
+
+    <string name="cleaning">Force closing background user apps…</string>
+    <string name="clean_done">Cleanup complete! Force closed %2$d apps and freed %1$s MB RAM.</string>
+    <string name="clean_noop">System optimized! All user apps already closed.</string>
+    <string name="tip_note">Force closes background processes of user-installed applications to maximize free RAM. Deep app caches and data can be cleared in TV Storage / App Manager.</string>
+</resources>
